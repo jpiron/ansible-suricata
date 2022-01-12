@@ -221,8 +221,12 @@ af-packet:
     defrag: {{ item.defrag }}
     cluster-type: {{ item.cluster_type }}
     cluster-id: {{ item.cluster_id }}
+    {% if item.copy_mode is defined -%}
     copy-mode: {{ item.copy_mode }}
+    {%- endif -%}
+    {% if item.copy_iface is defined -%}
     copy-iface: {{ item.copy_iface }}
+    {%- endif -%}
     buffer-size: {{ item.buffer_size }}
     disable-promisc: {{ item.disable_promisc }}
     use-nmap: {{ item.use_nmap }}
