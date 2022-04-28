@@ -90,6 +90,9 @@ unix-command:
 outputs:
 {%   for output in suricata_outputs %}
   - {{ output.name }}:
+{%     if output.nostamp is defined %}
+      nostamp: {{ output.nostamp }}
+{%     endif %}
 {%     if output.enabled is defined %}
       enabled: {{ output.enabled }}
 {%     endif %}
