@@ -60,5 +60,5 @@
     name: "suricata rules update"
     special_time: daily
     user: "root"
-    job: "/usr/bin/suricata-update --no-test"
+    job: "/usr/bin/suricata-update update-sources && /usr/bin/suricata-update --no-test"
     cron_file: suricata_rule_updates
