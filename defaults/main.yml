@@ -125,6 +125,7 @@ suricata_outputs:
     enabled: "yes"
     filename: unified2.alert
     limit: 32mb  # File size limit.  Can be specified in kb, mb, gb.
+    nostamp: "no"
     xff:
       - var: enabled
         val: "no"
