@@ -196,6 +196,9 @@ suricata_pfring_interfaces:
     cluster_id: 93
     cluster_type: cluster_flow
 suricata_reference_config_file: /etc/suricata/reference.config
+suricata_sources_detection_rules: 
+  - oisf/trafficid
+  - et/open
 suricata_rules:
   - botcc.rules
   - ciarmy.rules
@@ -241,6 +244,7 @@ suricata_rules:
   - tor.rules
   - decoder-events.rules # available in suricata sources under rules dir
   - stream-events.rules  # available in suricata sources under rules dir
+  - suricata.rules       # see https://suricata.readthedocs.io/en/suricata-4.1.10/rule-management/suricata-update.html#updating-your-rules
   - http-events.rules    # available in suricata sources under rules dir
   - smtp-events.rules    # available in suricata sources under rules dir
   - dns-events.rules     # available in suricata sources under rules dir
