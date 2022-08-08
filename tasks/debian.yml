@@ -17,4 +17,4 @@
     state: present
   with_items:
     - suricata
-    - oinkmaster
+    - suricata-update

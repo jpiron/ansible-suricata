@@ -7,3 +7,4 @@
   when: config_suricata is defined and config_suricata
 
 - include: configure_interface_offloading.yml
+  when: suricata_interfaces | selectattr('disable_offloading') | length > 0
