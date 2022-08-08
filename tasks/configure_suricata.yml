@@ -26,18 +26,39 @@
     mode: 0644
   notify: restart suricata
 
-- name: configure_suricata | configuring oinkmaster
-  template:
-    src: "etc/oinkmaster.conf.j2"
-    dest: "/etc/oinkmaster.conf"
+# removing oinkmaster configuration in order to replace it by suricata-updates
+
+- name: configure_suricata | uninstall oinkmaster
+  apt:
+    name: oinkmaster
+    state: absent 
+
+- name: configure_suricata | removing oinkmaster configuration file
+  file:
+    path: "/etc/oinkmaster.conf"
     owner: root
     group: root
     mode: 0644
+    state: absent 
 
-- name: configure_suricata | configuring oinkmaster cron job
+- name: configure_suricata | removing oinkmaster cron job
   cron:
     name: "oinkmaster rules update"
     special_time: daily
     user: "root"
     job: "/usr/sbin/oinkmaster -C /etc/oinkmaster.conf -o {{ suricata_default_rule_path }}"
     cron_file: oinkmaster_rule_updates
+    state: absent # Remove old cron if present
+
+- name: configure_suricata | enabling source rules
+  shell: 
+    cmd: "suricata-update enable-source {{ item }}"
+  with_items: "{{ suricata_sources_detection_rules }}"
+
+- name: configure_suricata | configuring suricata-updates cron job
+  cron:
+    name: "suricata rules update"
+    special_time: daily
+    user: "root"
+    job: "/usr/bin/suricata-update --no-test"
+    cron_file: suricata_rule_updates
