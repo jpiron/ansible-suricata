@@ -32,6 +32,9 @@ suricata_classification_file: /etc/suricata/classification.config
 suricata_config_file: /etc/suricata/suricata.yaml
 suricata_config_outputs: true
 suricata_default_rule_path: /etc/suricata/rules
+suricata_sources_detection_rules:
+  - oisf/trafficid
+  - et/open
 suricata_flow_timeouts:
   - name: default
     new: 30
