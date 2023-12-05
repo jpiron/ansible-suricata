@@ -266,3 +266,37 @@ suricata_ubuntu_ppa: ppa:oisf/suricata-stable  #Options are ppa:oisf/suricata-st
 suricata_unix_command:
   enabled: "no"
 #        filename: custom.socket
+
+app_layer:
+  - protocols:
+    - name: tls
+      enabled: yes
+      detection-ports:
+        - dp: 443
+      ja3-fingerprints: yes
+      #no-reassemble: yes
+    - dcerpc:
+      - enabled: yes
+    - ftp:
+      - enabled: yes
+    - ssh:
+      - enabled: yes
+    - smtp:
+      - enabled: yes
+    - imap:
+      - enabled: detection-only
+    - msn:
+      - enabled: detection-only
+    - smb:
+      - enabled: yes
+      - detection-ports:
+        - dp: 139
+    - dns:
+      - tcp:
+        - enabled: yes
+        - detection-ports:
+          - dp: 53
+      - udp:
+        - enabled: yes
+        - detection-ports:
+          - dp: 53
