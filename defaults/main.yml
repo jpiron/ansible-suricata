@@ -268,35 +268,52 @@ suricata_unix_command:
 #        filename: custom.socket
 
 app_layer:
-  - protocols:
+  protocols:
     - name: tls
-      enabled: yes
-      detection-ports:
-        - dp: 443
-      ja3-fingerprints: yes
-      #no-reassemble: yes
-    - dcerpc:
-      - enabled: yes
-    - ftp:
-      - enabled: yes
-    - ssh:
-      - enabled: yes
-    - smtp:
-      - enabled: yes
-    - imap:
-      - enabled: detection-only
-    - msn:
-      - enabled: detection-only
-    - smb:
-      - enabled: yes
-      - detection-ports:
-        - dp: 139
-    - dns:
-      - tcp:
-        - enabled: yes
-        - detection-ports:
-          - dp: 53
-      - udp:
-        - enabled: yes
-        - detection-ports:
-          - dp: 53
+      enabled: "yes"
+      detection_ports:
+        dp: 443
+      ja3_fingerprints: "yes"
+      #no-reassemble: "yes"
+    - name: dcerpc
+      enabled: "yes"
+    - name: ftp
+      enabled: "yes"
+    - name: ssh
+      enabled: "yes"
+    - name: smtp
+      enabled: "yes"
+    - name: imap
+      enabled: detection-only
+    - name: msn
+      enabled: detection-only
+    - name: smb
+      enabled: "yes"
+      detection_ports:
+        dp: 139
+    - name: dns
+      tcp:
+        enabled: "yes"
+        detection_ports:
+          dp: 53
+      udp:
+        enabled: "yes"
+        detection_ports:
+          dp: 53
+    - name: modbus
+      enabled: "no"
+      detection_ports:
+        dp: 502
+      # Stream reassembly size for modbus. By default track it completely.
+      stream_depth: 0
+    # DNP3
+    - name: dnp3
+      enabled: "no"
+      detection_ports:
+        dp: 20000
+    # SCADA EtherNet/IP and CIP protocol support
+    - name: enip
+      enabled: "no"
+      detection_ports:
+        dp: 44818
+        sp: 44818

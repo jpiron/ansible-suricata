@@ -874,12 +874,18 @@ app-layer:
     {{item.name}}:
 {% if item.name != 'dns' %}
       enabled: {{ item.enabled }}
-{% if item.name == 'tls' or item.name == 'smb' %}
+{% if item.detection_ports is defined %}
       detection-ports:
         dp: {{ item.detection_ports.dp }}
+{% if item.detection_ports.sp is defined %}
+        sp: {{ item.detection_ports.sp }}
 {% endif %}
-{% if item.name == 'tls'%}
+{% endif %}
+{% if item.ja3_fingerprints is defined %}
       ja3-fingerprints: {{ item.ja3_fingerprints }}
+{% endif %}
+{% if item.stream_depth is defined %}
+      stream-depth: {{ item.stream_depth }}
 {% endif %}
 {% endif %}
 {% if item.name == 'dns' %}

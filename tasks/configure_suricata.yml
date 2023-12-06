@@ -31,13 +31,13 @@
 - name: configure_suricata | uninstall oinkmaster
   apt:
     name: oinkmaster
-    state: absent 
+    state: absent
   register: oinkmaster_uninstallation
 
 - name: configure_suricata | removing oinkmaster configuration file
   file:
     path: "/etc/oinkmaster.conf"
-    state: absent 
+    state: absent
   become: true
   when: oinkmaster_uninstallation is changed
 
@@ -52,9 +52,15 @@
   become: true
   when: oinkmaster_uninstallation is changed
 
+- name: configure_suricata | updating source rules
+  command: "suricata-update update-sources"
+  register: result
+  ignore_errors: true
+  changed_when: '"ERROR" not in result.stderr'
+
 - name: configure_suricata | enabling source rules
   command: "suricata-update enable-source {{ item }}"
-  with_items: "{{ suricata_sources_detection_rules }}"
+  loop: "{{ suricata_sources_detection_rules }}"
   register: result
   ignore_errors: true
   changed_when: '"ERROR" not in result.stderr'
@@ -65,6 +71,6 @@
     name: "suricata rules update"
     special_time: daily
     user: "root"
-    job: "/usr/bin/suricata-update update-sources && /usr/bin/suricata-update --no-test"
+    job: "/usr/bin/suricata-update update-sources && /usr/bin/suricata-update"
     cron_file: suricata_rule_updates
   become: true
