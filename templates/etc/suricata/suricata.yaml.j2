@@ -870,103 +870,37 @@ pcre:
 # "detection-only" enables detection only(parser disabled).
 app-layer:
   protocols:
-    tls:
-      enabled: yes
+{% for item in app_layer.protocols %}
+    {{item.name}}:
+{% if item.name != 'dns' %}
+      enabled: {{ item.enabled }}
+{% if item.detection_ports is defined %}
       detection-ports:
-        dp: 443
-
-      #no-reassemble: yes
-    dcerpc:
-      enabled: yes
-    ftp:
-      enabled: yes
-    ssh:
-      enabled: yes
-    smtp:
-      enabled: yes
-    imap:
-      enabled: detection-only
-    msn:
-      enabled: detection-only
-    smb:
-      enabled: yes
-      detection-ports:
-        dp: 139
-    # smb2 detection is disabled internally inside the engine.
-    #smb2:
-    #  enabled: yes
-    dns:
-      # memcaps. Globally and per flow/state.
-      #global-memcap: 16mb
-      #state-memcap: 512kb
-
-      # How many unreplied DNS requests are considered a flood.
-      # If the limit is reached, app-layer-event:dns.flooded; will match.
-      #request-flood: 500
-
+        dp: {{ item.detection_ports.dp }}
+{% if item.detection_ports.sp is defined %}
+        sp: {{ item.detection_ports.sp }}
+{% endif %}
+{% endif %}
+{% if item.ja3_fingerprints is defined %}
+      ja3-fingerprints: {{ item.ja3_fingerprints }}
+{% endif %}
+{% if item.stream_depth is defined %}
+      stream-depth: {{ item.stream_depth }}
+{% endif %}
+{% endif %}
+{% if item.name == 'dns' %}
       tcp:
-        enabled: yes
+        enabled: {{ item.tcp.enabled }}
         detection-ports:
-          dp: 53
+          dp: {{ item.tcp.detection_ports.dp }}
       udp:
-        enabled: yes
+        enabled: {{ item.udp.enabled }}
         detection-ports:
-          dp: 53
+          dp: {{ item.udp.detection_ports.dp }}
+{% endif %}
+{% endfor %}
     http:
       enabled: yes
-      # memcap: 64mb
-
-      ###########################################################################
-      # Configure libhtp.
-      #
-      #
-      # default-config:           Used when no server-config matches
-      #   personality:            List of personalities used by default
-      #   request-body-limit:     Limit reassembly of request body for inspection
-      #                           by http_client_body & pcre /P option.
-      #   response-body-limit:    Limit reassembly of response body for inspection
-      #                           by file_data, http_server_body & pcre /Q option.
-      #   double-decode-path:     Double decode path section of the URI
-      #   double-decode-query:    Double decode query section of the URI
-      #
-      # server-config:            List of server configurations to use if address matches
-      #   address:                List of ip addresses or networks for this block
-      #   personalitiy:           List of personalities used by this block
-      #   request-body-limit:     Limit reassembly of request body for inspection
-      #                           by http_client_body & pcre /P option.
-      #   response-body-limit:    Limit reassembly of response body for inspection
-      #                           by file_data, http_server_body & pcre /Q option.
-      #   double-decode-path:     Double decode path section of the URI
-      #   double-decode-query:    Double decode query section of the URI
-      #
-      #   uri-include-all:        Include all parts of the URI. By default the
-      #                           'scheme', username/password, hostname and port
-      #                           are excluded. Setting this option to true adds
-      #                           all of them to the normalized uri as inspected
-      #                           by http_uri, urilen, pcre with /U and the other
-      #                           keywords that inspect the normalized uri.
-      #                           Note that this does not affect http_raw_uri.
-      #                           Also, note that including all was the default in
-      #                           1.4 and 2.0beta1.
-      #
-      #   meta-field-limit:       Hard size limit for request and response size
-      #                           limits. Applies to request line and headers,
-      #                           response line and headers. Does not apply to
-      #                           request or response bodies. Default is 18k.
-      #                           If this limit is reached an event is raised.
-      #
-      # Currently Available Personalities:
-      #   Minimal
-      #   Generic
-      #   IDS (default)
-      #   IIS_4_0
-      #   IIS_5_0
-      #   IIS_5_1
-      #   IIS_6_0
-      #   IIS_7_0
-      #   IIS_7_5
-      #   Apache_2
-      ###########################################################################
       libhtp:
 
          default-config:

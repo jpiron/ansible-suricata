@@ -31,7 +31,7 @@ suricata_af_packet_interfaces:
 suricata_classification_file: /etc/suricata/classification.config
 suricata_config_file: /etc/suricata/suricata.yaml
 suricata_config_outputs: true
-suricata_default_rule_path: /etc/suricata/rules
+suricata_default_rule_path: /var/lib/suricata/rules
 suricata_sources_detection_rules:
   - oisf/trafficid
   - et/open
@@ -266,3 +266,54 @@ suricata_ubuntu_ppa: ppa:oisf/suricata-stable  #Options are ppa:oisf/suricata-st
 suricata_unix_command:
   enabled: "no"
 #        filename: custom.socket
+
+app_layer:
+  protocols:
+    - name: tls
+      enabled: "yes"
+      detection_ports:
+        dp: 443
+      ja3_fingerprints: "yes"
+      #no-reassemble: "yes"
+    - name: dcerpc
+      enabled: "yes"
+    - name: ftp
+      enabled: "yes"
+    - name: ssh
+      enabled: "yes"
+    - name: smtp
+      enabled: "yes"
+    - name: imap
+      enabled: detection-only
+    - name: msn
+      enabled: detection-only
+    - name: smb
+      enabled: "yes"
+      detection_ports:
+        dp: 139
+    - name: dns
+      tcp:
+        enabled: "yes"
+        detection_ports:
+          dp: 53
+      udp:
+        enabled: "yes"
+        detection_ports:
+          dp: 53
+    - name: modbus
+      enabled: "no"
+      detection_ports:
+        dp: 502
+      # Stream reassembly size for modbus. By default track it completely.
+      stream_depth: 0
+    # DNP3
+    - name: dnp3
+      enabled: "no"
+      detection_ports:
+        dp: 20000
+    # SCADA EtherNet/IP and CIP protocol support
+    - name: enip
+      enabled: "no"
+      detection_ports:
+        dp: 44818
+        sp: 44818
