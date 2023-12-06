@@ -870,28 +870,29 @@ pcre:
 # "detection-only" enables detection only(parser disabled).
 app-layer:
   protocols:
-  {% for item in app_layer.protocols %}
-    {{ item.name }}:
-      {% if item.name != 'dns' %}:
+{% for item in app_layer.protocols %}
+    {{item.name}}:
+{% if item.name != 'dns' %}
       enabled: {{ item.enabled }}
-      {% if item.name == 'tls' or item.name == 'smb' %}:
-      detection-ports: {{ item.detection_ports }}
+{% if item.name == 'tls' or item.name == 'smb' %}
+      detection-ports:
         dp: {{ item.detection_ports.dp }}
-      {% endif %}
-      {% if item.name == 'tls' %}:
+{% endif %}
+{% if item.name == 'tls'%}
       ja3-fingerprints: {{ item.ja3_fingerprints }}
-      {% endif %}
-      {% endif %}
-      {% if item.name == 'dns' %}:
+{% endif %}
+{% endif %}
+{% if item.name == 'dns' %}
       tcp:
         enabled: {{ item.tcp.enabled }}
-        detection-ports: {{ item.tcp.detection_ports }}
+        detection-ports:
           dp: {{ item.tcp.detection_ports.dp }}
       udp:
         enabled: {{ item.udp.enabled }}
-        detection-ports: {{ item.udp.detection_ports }}
+        detection-ports:
           dp: {{ item.udp.detection_ports.dp }}
-      {% endif %}
+{% endif %}
+{% endfor %}
     http:
       enabled: yes
       libhtp:
