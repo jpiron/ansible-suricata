@@ -66,6 +66,13 @@
   changed_when: '"ERROR" not in result.stderr'
   failed_when: "'The source {{ item }} is already enabled.' not in result.stderr"
 
+- name: configure_suricata | updating rules
+  command: "/usr/bin/suricata-update update-sources && /usr/bin/suricata-update"
+  register: result
+  ignore_errors: true
+  become: true
+  changed_when: '"ERROR" not in result.stderr'
+
 - name: configure_suricata | configuring suricata-updates cron job
   cron:
     name: "suricata rules update"
