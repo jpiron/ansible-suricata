@@ -1,10 +1,10 @@
 ---
 # tasks file for ansible-suricata
-- include: debian.yml
+- ansible.builtin.import_tasks: debian.yml
   when: ansible_os_family == "Debian"
 
-- include: configure_suricata.yml
+- ansible.builtin.import_tasks: configure_suricata.yml
   when: config_suricata is defined and config_suricata
 
-- include: configure_interface_offloading.yml
+- ansible.builtin.import_tasks: configure_interface_offloading.yml
   when: suricata_interfaces | selectattr('disable_offloading') | length > 0
